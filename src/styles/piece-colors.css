@@ -1,0 +1,27 @@
+.s-piece {
+	background-color: lime;
+}
+
+.z-piece {
+	background-color: crimson;
+}
+
+.line-piece {
+	background-color: aqua;
+}
+
+.left-l-piece {
+	background-color: darkorange;
+}
+
+.right-l-piece {
+	background-color: blue;
+}
+
+.square-piece {
+	background-color: yellow;
+}
+
+.t-piece {
+	background-color: blueviolet;
+}

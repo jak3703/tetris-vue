@@ -1,20 +1,13 @@
 <template>
-  <router-view id="router"></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
 
 export default {
-  name: 'App',
-  components: {
-    
-  }
+  name: 'App'
 }
 </script>
 
 <style>
-	/* #router {
-		width: 100vw;
-		height: 100vh;
-	} */
 </style>

@@ -41,7 +41,7 @@
 	.header-box h1 {
 		text-align: center;
 		font-size: 160px;
-		font-family: sans-serif;
+		font-family: 'Courier New', Courier, monospace;
 		color: orangered;
 		opacity: 0.6;
 		margin: 0;
