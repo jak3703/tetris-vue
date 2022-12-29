@@ -53,6 +53,9 @@
 				deep: true
 			}
 		},
+		mounted() {
+			this.tetris.init()
+		},
 		methods: {
 			updateCurGrid(fallingPiece, grid) {
 				const newGrid = []
@@ -69,7 +72,6 @@
 					}
 				}
 				for (let i = 0; i < 4; i++) {
-					// see line 60 comment
 					if (fallingPieceTileLocations[i][0] >= 4) {
 						newGrid[fallingPieceTileLocations[i][0] - 4][fallingPieceTileLocations[i][1]] = fallingPiece.getSymbol()
 					}

@@ -1,5 +1,8 @@
 <template>
-	<div id="tetris-event-target">
+	<div 
+		id="tetris-event-target"
+		@tetris-game-over="gameOverHandler"
+	>
 		<div v-if="tetris">
 			<div class="tetris-wrapper">
 				<div>
@@ -56,6 +59,7 @@
 		},
 		watch: {
 			'tetris.backlog.backlogPiece'(newValue) {
+				this.resetBacklogGrid()
 				const tLocs = this.tetris.normalizePiecePositions(newValue)
 				const symbol = newValue.getSymbol()
 				for (let i = 0; i < tLocs.length; i++) {
@@ -67,10 +71,7 @@
 			}
 		},
 		created() {
-			this.backlogGrid = []
-			for (let i = 0; i < this.backlogGridDims; i++) {
-				this.backlogGrid.push(new Array(this.backlogGridDims).fill('.'))
-			}
+			this.resetBacklogGrid()
 		},
 		mounted() {
 			this.tetris = new Tetris(document.querySelector('#tetris-event-target'))
@@ -96,6 +97,15 @@
 					default:
 						return 'blank-cell'
 				}
+			},
+			resetBacklogGrid() {
+				this.backlogGrid = []
+				for (let i = 0; i < this.backlogGridDims; i++) {
+					this.backlogGrid.push(new Array(this.backlogGridDims).fill('.'))
+				}
+			},
+			gameOverHandler() {
+				console.log('GAME OVER')
 			}
 		}
 	}
@@ -117,7 +127,7 @@
 		margin-right: 75px;
 	}
 
-	body {
+	#tetris-event-target {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
