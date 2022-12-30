@@ -17,24 +17,23 @@
 
 	export default {
 		name: "TetrisView",
-		props: ['tetris'],
+		props: ['tetris', 'boardCellDims'],
 		data() {
 			return {
 				numCells: Tetris.GRID_HEIGHT * Tetris.GRID_WIDTH,
-				boardCellDims: '25px',
 				curGrid: null // grid of what to display
 			}
 		},
 		computed: {
 			boardGrid() {
 				return {
-					'grid-template-columns': `repeat(${Tetris.GRID_WIDTH}, ${this.boardCellDims})`
+					'grid-template-columns': `repeat(${Tetris.GRID_WIDTH}, ${this.boardCellDims}px)`
 				}
 			},
 			boardGridCell() {
 				return {
-					width: this.boardCellDims,
-					height: this.boardCellDims
+					width: `${this.boardCellDims}px`,
+					height: `${this.boardCellDims}px`
 				}
 			}
 		},

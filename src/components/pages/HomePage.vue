@@ -6,7 +6,7 @@
 			</div>
 			<div class="control-panel">
 				<div class="control-panel-buttons">
-					<button class="start-button" @click="startGame">Start</button>
+					<button class="menu-button start-button" @click="startGame">Start</button>
 				</div>
 			</div>
 		</div>
@@ -67,11 +67,8 @@
 	}
 
 	.start-button {
+		font-size: 2em;
 		width: 15%;
 		height: 60%;
-		font-family: 'Courier New', Courier, monospace;
-		font-size: 2em;
-		letter-spacing: 3px;
-		border: 2px solid black;
 	}
 </style>  

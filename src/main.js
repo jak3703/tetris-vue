@@ -9,6 +9,7 @@ import HomePage from './components/pages/HomePage.vue'
 // import styles
 import './styles/piece-colors.css'
 import './styles/grid-styles.css'
+import './styles/menu-styles.css'
 
 const routes = [
 	{ path: '/', component: HomePage },

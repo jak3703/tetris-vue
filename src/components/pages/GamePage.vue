@@ -1,22 +1,48 @@
 <template>
 	<div 
 		id="tetris-event-target"
-		@tetris-game-over="gameOverHandler"
 	>
 		<div v-if="tetris">
 			<div class="tetris-wrapper">
 				<div>
 					Score: {{ currentScore }}
 				</div>
-				<TetrisView :tetris="tetris" class="tetris-board-wrapper"></TetrisView>
-				<div class="grid-container backlog-alignment" :style="backlogBox">
+				<TetrisView 
+					:tetris="tetris"
+					:board-cell-dims="tetrisBoardCellDims"
+					class="tetris-board-wrapper board-border"
+					:class="{
+						'board-ghosted': tetris.paused || tetris.terminated
+					}"
+				>
+				</TetrisView>
+				<div class="backlog-menu-wrapper" :style="{height: `${backlogMenuHeight}px`}">
 					<div 
-						v-for="i in backlogGrid.length * backlogGrid[0].length"
-						:key="i"
-						:style="backlogBoxCell"
-						:class="getBacklogCellColor(i)"
+						class="grid-container backlog-alignment board-border"
+						:class="{
+							'board-ghosted': tetris.paused || tetris.terminated
+						}"
+						:style="backlogBox"
 					>
+						<div 
+							v-for="i in backlogGrid.length * backlogGrid[0].length"
+							:key="i"
+							:style="backlogBoxCell"
+							:class="getBacklogCellColor(i)"
+						>
+						</div>
 					</div>
+					<TetrisMenu
+						:paused="tetris.paused"
+						:terminated="tetris.terminated"
+						:style="{
+							height: `${0.5 * backlogMenuHeight}px`,
+							width: `${0.75 * backlogMenuWidth}px`
+						}"
+						@menu-resume="tetris.togglePause()"
+						@menu-restart="$router.go()"
+					>
+					</TetrisMenu>
 				</div>
 			</div>
 		</div>
@@ -28,33 +54,43 @@
   
 <script>
 	import TetrisView from '../TetrisView.vue'
+	import TetrisMenu from '../TetrisMenu.vue'
 	import Tetris from 'tetris'
 
 	export default {
 		name: 'GamePage',
 		components: {
-			TetrisView
+			TetrisView,
+			TetrisMenu
 		},
 		data() {
 			return {
 				tetris: null,
+				tetrisAnchor: null,
 				backlogGrid: null,
 				backlogGridDims: 5,
-				backlogGridCellDims: '15px',
+				backlogGridCellDims: 15, //px
+				tetrisBoardCellDims: 25, //px
 				currentScore: 0
 			}
 		},
 		computed: {
 			backlogBox() {
 				return {
-					'grid-template-columns': `repeat(${this.backlogGridDims}, ${this.backlogGridCellDims})`
+					'grid-template-columns': `repeat(${this.backlogGridDims}, ${this.backlogGridCellDims}px)`
 				}
 			},
 			backlogBoxCell() {
 				return {
-					width: this.backlogGridCellDims,
-					height: this.backlogGridCellDims
+					width: `${this.backlogGridCellDims}px`,
+					height: `${this.backlogGridCellDims}px`
 				}
+			},
+			backlogMenuHeight() {
+				return Tetris.GRID_HEIGHT * this.tetrisBoardCellDims
+			},
+			backlogMenuWidth() {
+				return Tetris.GRID_WIDTH * this.tetrisBoardCellDims
 			}
 		},
 		watch: {
@@ -72,9 +108,14 @@
 		},
 		created() {
 			this.resetBacklogGrid()
+			document.querySelector('body').setAttribute('style', 'background-color: gray')
 		},
 		mounted() {
-			this.tetris = new Tetris(document.querySelector('#tetris-event-target'))
+			this.tetrisAnchor = document.querySelector('#tetris-event-target')
+			this.tetris = new Tetris(this.tetrisAnchor)
+		},
+		unmounted() {
+			document.querySelector('body').removeAttribute('style')
 		},
 		methods: {
 			getBacklogCellColor(idx) {
@@ -103,9 +144,6 @@
 				for (let i = 0; i < this.backlogGridDims; i++) {
 					this.backlogGrid.push(new Array(this.backlogGridDims).fill('.'))
 				}
-			},
-			gameOverHandler() {
-				console.log('GAME OVER')
 			}
 		}
 	}
@@ -127,6 +165,14 @@
 		margin-right: 75px;
 	}
 
+	.board-ghosted {
+		opacity: 0.5;
+	}
+
+	.board-border {
+		border: 3px solid black;
+	}
+
 	#tetris-event-target {
 		display: flex;
 		flex-direction: column;
@@ -134,5 +180,13 @@
 		width: 90vw;
 		height: 90vh;
 	}
+
+	.backlog-menu-wrapper {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+	}
+
 </style>
   
